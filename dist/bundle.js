@@ -229,6 +229,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _searchInput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./searchInput */ "./js/searchInput.js");
 /* harmony import */ var _arrows__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./arrows */ "./js/arrows.js");
 /* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./tooltip */ "./js/tooltip.js");
+/* harmony import */ var _videosOnPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./videosOnPage */ "./js/videosOnPage.js");
+
 
 
 
@@ -300,20 +302,6 @@ var inputSubmit = function inputSubmit() {
   searchBy(query, pageToken);
 };
 
-var videosOnPageCounter = function videosOnPageCounter() {
-  var videosOnPageCount;
-
-  if (width >= 1300) {
-    videosOnPageCount = 4;
-  } else if (width >= 768) {
-    videosOnPageCount = 2;
-  } else {
-    videosOnPageCount = 1;
-  }
-
-  return videosOnPageCount;
-};
-
 var scroll = function scroll() {
   var reverse = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -354,7 +342,7 @@ var lettersOrNums = function lettersOrNums(keyCode) {
   return isUsefulSymbol;
 };
 
-videosOnPage = videosOnPageCounter();
+videosOnPage = Object(_videosOnPage__WEBPACK_IMPORTED_MODULE_5__["default"])();
 
 var fillPageControl = function fillPageControl() {
   while (pageControl.lastChild) {
@@ -473,7 +461,7 @@ var hideElems = function hideElems(e) {
     pageViewer.style.transform = "rotate(".concat(deg + 360, "deg)");
   }
 
-  if (!pageViewer.contains(e.target) && pageControl.style.opacity === '1') {
+  if (!pageControl.contains(e.target) && !pageViewer.contains(e.target) && pageControl.style.opacity === '1') {
     fillPageControl();
   }
 
@@ -518,7 +506,7 @@ pageViewer.addEventListener('click', fillPageControl);
 window.addEventListener('resize', function () {
   if (videosCount) {
     width = parseInt(document.documentElement.clientWidth, 10);
-    videosOnPage = videosOnPageCounter();
+    videosOnPage = Object(_videosOnPage__WEBPACK_IMPORTED_MODULE_5__["default"])();
     activePage = Math.ceil(activeVideo / videosOnPage);
     pages = Math.ceil(videosCount / videosOnPage);
     var translate = (activePage - 1) * width;
@@ -608,9 +596,38 @@ var toggleTooltip = function toggleTooltip(elem) {
     tooltip.style.left = "".concat(left, "px");
     tooltip.classList.add('tooltip');
     document.body.appendChild(tooltip);
-  } else if (document.body.lastChild.classList[0] === 'tooltip') {
+  } else if (document.body.lastChild.className === 'tooltip') {
     document.body.removeChild(document.body.lastChild);
   }
+};
+
+
+
+/***/ }),
+
+/***/ "./js/videosOnPage.js":
+/*!****************************!*\
+  !*** ./js/videosOnPage.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return videosOnPageCounter; });
+var videosOnPageCounter = function videosOnPageCounter() {
+  var width = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : parseInt(document.documentElement.clientWidth, 10);
+  var videosOnPageCount;
+
+  if (width >= 1300) {
+    videosOnPageCount = 4;
+  } else if (width >= 768) {
+    videosOnPageCount = 2;
+  } else {
+    videosOnPageCount = 1;
+  }
+
+  return videosOnPageCount;
 };
 
 
