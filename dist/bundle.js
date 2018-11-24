@@ -598,6 +598,7 @@ var toggleTooltip = function toggleTooltip(elem) {
     document.body.appendChild(tooltip);
   } else if (document.body.lastChild.className === 'tooltip') {
     document.body.removeChild(document.body.lastChild);
+    /*wtf*/
   }
 };
 

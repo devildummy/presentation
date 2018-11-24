@@ -7,7 +7,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 100,
   },
