@@ -216,7 +216,7 @@ const hideElems = (e) => {
     const deg = parseInt(pageViewer.style.transform.slice(7), 10) || 0;
     pageViewer.style.transform = `rotate(${deg + 360}deg)`;
   }
-  if (!pageViewer.contains(e.target) && pageControl.style.opacity === '1') {
+  if (!pageControl.contains(e.target) && !pageViewer.contains(e.target) && pageControl.style.opacity === '1') {
     fillPageControl();
   }
   toggleTooltip();

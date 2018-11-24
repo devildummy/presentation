@@ -19,7 +19,7 @@ const toggleTooltip = (elem, ...rest) => {
     tooltip.style.left = `${left}px`;
     tooltip.classList.add('tooltip');
     document.body.appendChild(tooltip);
-  } else if (document.body.lastChild.classList[0] === 'tooltip') {
+  } else if (document.body.lastChild.className === 'tooltip') {
     document.body.removeChild(document.body.lastChild);
   }
 };
