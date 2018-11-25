@@ -22,6 +22,8 @@ let activePage = 1;
 let pages = 1;
 let pageToken = false;
 let videosOnPage = 0;
+let touchX = 0;
+let touchY = 0;
 
 let width = parseInt(document.documentElement.clientWidth, 10);
 
@@ -161,7 +163,7 @@ const touchListener = () => {
     swiper.style.transform = `translateX(${savePosition - (touchmove / 2)}px)`;
   };
   const end = () => {
-    swiper.style.transition = 'all 1s';
+    swiper.style.transition = 'transform 0.5s';
     touchWide();
     swiperWrapper.removeEventListener('touchmove', move);
     touchstart = 0;
@@ -172,11 +174,11 @@ const touchListener = () => {
     touchend = touchstart;
     touchmove = 0;
     savePosition = parseInt(swiper.style.transform.slice(11), 10) || 0;
-    swiper.style.transition = 'all 0.1s';
+    swiper.style.transition = 'transform 0.1s';
     swiperWrapper.addEventListener('touchmove', move);
   };
   const endMouse = () => {
-    swiper.style.transition = 'all 1s';
+    swiper.style.transition = 'transform 0.5s';
     touchWide();
     swiperWrapper.removeEventListener('mousemove', moveMouse);
     touchstart = 0;
@@ -187,7 +189,7 @@ const touchListener = () => {
     touchend = touchstart;
     touchmove = 0;
     savePosition = parseInt(swiper.style.transform.slice(11), 10) || 0;
-    swiper.style.transition = 'all 0.1s';
+    swiper.style.transition = 'transform 0.1s';
     swiperWrapper.addEventListener('mousemove', moveMouse);
   };
 
@@ -206,7 +208,13 @@ const hideElems = (e) => {
     searchElem.classList.remove('close');
     input.focus();
   }
-  if (pageControl.contains(e.target) && pageControl !== e.target) {
+  let touchDifference = 0;
+  if (Math.abs(e.screenX - touchX) > Math.abs(e.screenY - touchY)) {
+    touchDifference = Math.abs(e.screenX - touchX);
+  } else {
+    touchDifference = Math.abs(e.screenY - touchY);
+  }
+  if (pageControl.contains(e.target) && pageControl !== e.target && touchDifference < 10) {
     swiper.style.transform = `translateX(${-(e.target.textContent - 1) * width}px)`;
     activeVideo = ((e.target.textContent - 1) * videosOnPage) + 1;
     activePage = +e.target.textContent;
@@ -255,8 +263,20 @@ pageControl.addEventListener('mouseout', (e) => {
     toggleTooltip();
   }
 });
-body.addEventListener('mouseup', hideElems);
-body.addEventListener('touchend', hideElems);
+body.addEventListener('mousedown', (e) => {
+  touchX = e.screenX;
+  touchY = e.screenY;
+  body.addEventListener('mouseup', hideElems);
+});
+body.addEventListener('touchstart', (e) => {
+  touchX = e.touches[0].screenX;
+  touchY = e.touches[0].screenY;
+  body.addEventListener('touchmove', (event) => {
+    touchX = event.touches[0].screenX;
+    touchY = event.touches[0].screenY;
+  });
+  body.addEventListener('touchend', hideElems);
+});
 pageViewer.addEventListener('mouseup', fillPageControl);
 window.addEventListener('resize', () => {
   if (videosCount) {

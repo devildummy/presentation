@@ -37,7 +37,8 @@ body{
   justify-content: flex-start;
   align-items: center;
   min-width: 15000vw;
-  transition: transform 1.5s;
+  transform: translateX(0px);
+  transition: transform 0.5s;
   will-change: transform;
 }
 .video{
