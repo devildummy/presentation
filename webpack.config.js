@@ -7,11 +7,10 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  watch: true,
+  watch: false,
   watchOptions: {
     aggregateTimeout: 100,
   },
-  devtool: 'source-map',
   module: {
     rules: [{
       test: /.jsx?$/,
