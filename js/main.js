@@ -75,6 +75,31 @@ const inputSubmit = () => {
   const query = input.value;
   searchBy(query, pageToken);
 };
+const fillPageControl = () => {
+  while (pageControl.lastChild) {
+    pageControl.removeChild(pageControl.lastChild);
+  }
+  if (pageControl.style.opacity === '0' || pageControl.style.opacity === '') {
+    for (let i = 1; i <= pages; i += 1) {
+      const elem = document.createElement('div');
+      const text = document.createElement('span');
+      elem.classList.add('pages');
+      text.textContent = i;
+      elem.appendChild(text);
+      pageControl.appendChild(elem);
+    }
+    pageControl.style.zIndex = '2';
+    pageControl.style.opacity = '1';
+    swiper.classList.add('blured');
+  } else {
+    pageControl.style.opacity = '0';
+    swiper.classList.remove('blured');
+    setTimeout(() => {
+      pageControl.style.zIndex = -1;
+    }, 100);
+  }
+  pageControl.scrollTop = pageControl.scrollHeight;
+};
 const scroll = (reverse = false) => {
   if ((videosCount - activeVideo) < 12) {
     searchBy(input.value, pageToken);
@@ -111,31 +136,6 @@ const lettersOrNums = (keyCode) => {
   return isUsefulSymbol;
 };
 videosOnPage = videosOnPageCounter();
-const fillPageControl = () => {
-  while (pageControl.lastChild) {
-    pageControl.removeChild(pageControl.lastChild);
-  }
-  if (pageControl.style.opacity === '0' || pageControl.style.opacity === '') {
-    for (let i = 1; i <= pages; i += 1) {
-      const elem = document.createElement('div');
-      const text = document.createElement('span');
-      elem.classList.add('pages');
-      text.textContent = i;
-      elem.appendChild(text);
-      pageControl.appendChild(elem);
-    }
-    pageControl.style.zIndex = '2';
-    pageControl.style.opacity = '1';
-    swiper.classList.add('blured');
-  } else {
-    pageControl.style.opacity = '0';
-    swiper.classList.remove('blured');
-    setTimeout(() => {
-      pageControl.style.zIndex = -1;
-    }, 100);
-  }
-  pageControl.scrollTop = pageControl.scrollHeight;
-};
 const touchListener = () => {
   let touchstart = 0;
   let touchmove = 0;
@@ -215,6 +215,7 @@ const hideElems = (e) => {
     }, 200);
     const deg = parseInt(pageViewer.style.transform.slice(7), 10) || 0;
     pageViewer.style.transform = `rotate(${deg + 360}deg)`;
+    fillPageControl();
   }
   if (!pageControl.contains(e.target) && !pageViewer.contains(e.target) && pageControl.style.opacity === '1') {
     fillPageControl();
@@ -254,9 +255,9 @@ pageControl.addEventListener('mouseout', (e) => {
     toggleTooltip();
   }
 });
-body.addEventListener('mousedown', hideElems);
-body.addEventListener('touchstart', hideElems);
-pageViewer.addEventListener('click', fillPageControl);
+body.addEventListener('mouseup', hideElems);
+body.addEventListener('touchend', hideElems);
+pageViewer.addEventListener('mouseup', fillPageControl);
 window.addEventListener('resize', () => {
   if (videosCount) {
     width = parseInt(document.documentElement.clientWidth, 10);
