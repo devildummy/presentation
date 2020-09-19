@@ -1,4 +1,4 @@
 # presentation
 
-* 1asfd
-* 2asf
++ 1asfd
++ 2asf
